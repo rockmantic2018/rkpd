@@ -53,6 +53,9 @@ class MusrenbangService
         $anggaran->lokasi = $lokasi ?? $request->input('lokasi');
         $anggaran->is_kelurahan = $is_kelurahan;
 
+        $anggaran->pagu = $request->associate('pagu');
+        $anggaran->prioritas = $request->associate('prioritas');
+
         $anggaran->tahapan()->associate($tahapan);
         $anggaran->statusKegiatan()->associate($statusKegiatan);
         $anggaran->jenisLokasi()->associate($jenisLokasi);
@@ -185,6 +188,8 @@ class MusrenbangService
         $item->is_kelurahan       = $anggaran->is_kelurahan;
         $item->district_id        = $anggaran->district_id;
         $item->village_id         = $anggaran->village_id;
+        $item->pagu               = $anggaran->pagu;
+        $item->prioritas               = $anggaran->prioritas;
         $item->user()->associate(auth()->user());
         $item->save();
 
@@ -241,7 +246,7 @@ class MusrenbangService
         if (!empty($user_opd)) {
             $model->village_id = $user_opd->id ?? null;
             $model->district_id = Opd::whereKode(substr($user_opd->kode, 0, 7))->first()->id ?? null;
-            
+
             if ($tahapan->nama == \App\Enum\Tahapan::KECAMATAN) {
                 $model->village_id = null;
             }

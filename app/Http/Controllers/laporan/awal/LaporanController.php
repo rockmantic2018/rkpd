@@ -54,8 +54,12 @@ class LaporanController extends Controller
 
         $districts = Districts::pluck('name', 'id');
 
+        // $users = User::whereHas('roles', function ($q) {
+        //     $q->whereRoleId(Role::findByName(Roles::OPD)->id);
+        // })->pluck('nama_lengkap', 'id');
+
         $users = User::whereHas('roles', function ($q) {
-            $q->whereRoleId(Role::findByName(Roles::OPD)->id);
+            $q->whereRoleId(Role::findByName(Roles::KECAMATAN)->id);
         })->pluck('nama_lengkap', 'id');
 
         return view('laporan.awal.index', compact('village',
@@ -113,7 +117,7 @@ class LaporanController extends Controller
         $anggaran = $items->first();
 
         $items = $items->toJson();
-        $view_table = view('laporan.renja._table', compact('items', 'anggaran', 'program','kegiat','sasaran','indikatorsasaran', 'sumberanggaran'));
+        $view_table = view('laporan.awal._table', compact('items', 'anggaran', 'program','kegiat','sasaran','indikatorsasaran', 'sumberanggaran'));
         //return view('laporan.renja._table', compact('items', 'anggaran', 'program','kegiat','sasaran','indikatorsasaran'));
         return $view_table;
     }

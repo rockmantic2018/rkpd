@@ -129,22 +129,46 @@
             }
         }
     </style>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <link href="{{ asset('/js/table2excel.js') }}" rel="stylesheet" type="text/css" />
+
+    <script>
+      var table2excel = new Table2Excel();
+
+      document.getElementById('export').addEventListener('click', function() {
+        table2excel.export(document.querySelectorAll('table'));
+      });
+    </script>
+
 </head>
 
 <body>
 
 
+<div class="">
+  <input type="button" id="export" value="export">
+</div>
 <!-- baru tabel -->
-<table width="1400" height="550" border="0" cellspacing="0" cellpadding="4" align="center" class="wrapper">
-<tr>
-	<td colspan="3">
-	   <h2>DAFTAR RENCANA PROGRAM DAN KEGIATAN PRIORITAS TAHUN 2019</h2>
-  </td>
-</tr>
+<table width="1400" height="550" border="0" cellspacing="0" cellpadding="4" align="center" class="wrapper" id="testTable">
 
 <tr>
+	<td colspan="3"  align="center">
+	   DAFTAR RENCANA PROGRAM DAN KEGIATAN RANCANGAN AWAL TAHUN 2019
+  </td>
+</tr>
+<tr>
+	<td colspan="3"  align="center">
+	   {{$anggaran->user->nama_lengkap }}
+  </td>
+</tr>
+<tr>
+	<td colspan="3"  align="center">
+	   KABUPATEN SUKABUMI
+  </td>
+</tr>
+<tr>
 	<td colspan="3">
-	<table width="100%" border="0" cellspacing="0" cellpadding="3" class="data_table">
+	<table width="100%" border="1" cellspacing="0" cellpadding="3" class="data_table">
     <tr style="border-bottom:#999 solid 2px;">
   		<th rowspan="3" width="50"><center>Nomor</center></th>
   		<th rowspan="3" width="70">Uraian Urusan, Organisasi, Program, dan Kegiatan</th>
@@ -152,7 +176,7 @@
   		<th rowspan="3" width="40">Sasaran Daerah</th>
   		<th rowspan="3" width="30">Lokasi</th>
   		<th colspan="9">Indikator Kerja tahun 2019</th>
-      <th colspan="16">Usulan Pagu 2019</th>
+      <th colspan="7">Usulan Pagu 2019</th>
     </tr>
 
     <tr style="border-bottom:#999 solid 2px;">
@@ -207,21 +231,18 @@
     </tr>
 
     <tr>
-        <td align="center" style="background-color:#FF0"><center></center></td>
-        <td colspan="20" style="background-color:#FF0">
+        <td style="background-color:#FF0; text-align:left;">
+
         </td>
-        </tr>
-        <tr>
+        <td colspan="20" style="background-color:#FF0"></td>
+    </tr>
+    <tr>
         <td style="background-color:#FF0"></td>
-        <td colspan="20" style="background-color:#FF0">
-                @php($user = auth()->user())
-                @php ($judul="1")
-               {{$user->nama_lengkap}}
-
+        <td colspan="20" style="background-color:#FF0; text-align:left">
+                <!-- @php($user = auth()->user())
+                @php ($judul="1") -->
+                {{$anggaran->user->nama_lengkap }}
         </td>
-                <tr style="border-bottom:#999 solid 2px;"></tr>
-                <tr style="border-bottom:#999 solid 2px;"></tr>
-
             @php ($nom="0")
             @php ($no="0")
             @foreach($program as $test2 => $nam)
@@ -233,22 +254,23 @@
                         @if($nom == 1)
                         <tr>
                             <td style="background-color:#90EE90">{{$no}}</td>
-                            <td colspan="20" style="background-color:#90EE90"> {{ $anggaran->user->nama_lengkap }} </td>
+                            <td colspan="20" style="background-color:#90EE90"> {{ $nam->nama }} </td>
 
                         </tr>
                         @endif
                         <tr>
-                            <td align="center">{{$no}}</td>
+                            <td align="left">{{$anggaran->prioritas}}</td>
                             <!-- <td align="center">2.09.23.{{ $nam->id }}.{{ ++$idx }}</td> -->
                             <td>{{ $anggaran->kegiatan->nama }}</td>
                             @foreach ($indikatorsasaran as $insan)
                                 @if($insan->id==$anggaran->kegiatan->indikator_sasaran_id)
-                                <td style="text-align:right;">
+                                <td style="text-align:left;">
+                                @php($indikator_program = $insan->nama)
                                 {{$insan->nama}}
                                 </td>
                                 @foreach($sasaran as $new)
                                 @if($new->id == $insan->sasaran_id)
-                                <td style="text-align:right;">
+                                <td style="text-align:left;">
                                 {{$new->nama}}
                                 </td>
                                 @endif
@@ -267,6 +289,7 @@
                             </td>
 
                             <td colspan="3" style="text-align:left;">
+                            {{$indikator_program}}
                             </td>
 
                             <td colspan="3" style="text-align:left;">
@@ -287,142 +310,38 @@
 
                             <td style="text-align:left;">
                               @if($anggaran->sumber_anggaran_id==1)
-                                {{"PIK P3K"}}
+                                {{number_format($anggaran->pagu, 2)}}
                               @endif
                             </td>
                             <td style="text-align:left;">
                               @if($anggaran->sumber_anggaran_id==2)
-                                {{"PIK Sektoral"}}
+                                {{number_format($anggaran->pagu, 2)}}
                               @endif
                             </td>
                             <td style="text-align:left;">
                               @if($anggaran->sumber_anggaran_id==3)
-                                {{"Pagu Indikatif"}}
+                                {{number_format($anggaran->pagu, 2)}}
                               @endif
                             </td>
-                            <td style="text-align:left;">{{"Total"}}</td>
+                            <td style="text-align:left;">{{number_format($anggaran->pagu, 2)}}</td>
                             <td style="text-align:left;">
                               @if($anggaran->sumber_anggaran_id==4)
-                                {{"APBD Provinsi"}}
+                                {{number_format($anggaran->pagu, 2)}}
                               @endif
                             </td>
                             <td style="text-align:left;">
                               @if($anggaran->sumber_anggaran_id==5)
-                                {{"APBN"}}
+                                {{number_format($anggaran->pagu, 2)}}
                               @endif
                             </td>
-                            <td style="text-align:left;">{{"Total"}}</td>
+                            <td style="text-align:left;">{{number_format($anggaran->pagu, 2)}}</td>
                         </tr>
                     @endif
                 @endforeach
                 @php($nom="0")
             @endforeach
-
-
-                  <h2>{{ $anggaran->user->nama_lengkap }}</h2>
-                    <h2>KABUPATEN SUKABUMI</h2>
-
 </table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <colgroup>
-                    <col style=" width: 10%;">
-                    <col style=" width: 23%;">
-                    <col style=" width: 34%;">
-                    <col style=" width: 30%;">
-                </colgroup>
-                <tbody>
-                <tr>
-                    <td width="10%">&nbsp;</td>
-                    <td width="23%">&nbsp;</td>
-                    <td width="35%">&nbsp;</td>
-                    <td width="30%">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="3" rowspan="3"></td>
-                    <td style="text-align:left;">Sukabumi, {{ \Carbon\Carbon::now()->format('d F Y') }} <br>
-                    </td>
-                </tr>
-                <tr style="height:40px;">
-                    <td>_________________________</td>
-                </tr>
-                <tr style="height:40px;">
-                    <td>&nbsp;</td>
-                </tr>
-                <tr style="height:40px;">
-                    <td>&nbsp;</td>
-                </tr>
-                <tr style="height:40px;">
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="3" rowspan="3"></td>
-                    <td style="text-align:left;">NIP : _____________________<br>
-                    </td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td style="text-align:center;">&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="4">&nbsp;</td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <colgroup>
-                    <col style=" width: 10%;">
-                    <col style=" width: 23%;">
-                    <col style=" width: 34%;">
-                    <col style=" width: 30%;">
-                </colgroup>
-                <tbody>
-                <tr>
-                    <td width="10%">&nbsp;</td>
-                    <td width="23%">&nbsp;</td>
-                    <td width="35%">&nbsp;</td>
-                    <td width="30%">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="3" rowspan="3">&nbsp;</td>
-                    <td style="text-align:center;">&nbsp;</td>
-                </tr>
-                <tr style="height:40px;">
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td style="text-align:center;">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td style="text-align:center;">&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="4">&nbsp;</td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3"></td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-    </tr>
-
-    </tbody>
-</table>
-</td></tr></table>
-
 </body>
+
+
 </html>

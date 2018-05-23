@@ -175,7 +175,7 @@
 	<td colspan="3">
 	<table width="100%" border="1" cellspacing="0" cellpadding="3" class="data_table">
     <tr style="border-bottom:#999 solid 2px;">
-  		<th rowspan="3" width="50"><center>Nomor</center></th>
+  		<th rowspan="3" width="50"><center>Prioritas</center></th>
   		<th rowspan="3" width="70">Uraian Urusan, Organisasi, Program, dan Kegiatan</th>
   		<th rowspan="3" width="40">Indikator Sasaran</th>
   		<th rowspan="3" width="40">Sasaran Daerah</th>
@@ -258,13 +258,13 @@
                         @php(++$no)
                         @if($nom == 1)
                         <tr>
-                            <td style="background-color:#90EE90">{{$no}}</td>
+                            <td style="background-color:#90EE90"></td>
                             <td colspan="20" style="background-color:#90EE90"> {{ $nam->nama }} </td>
 
                         </tr>
                         @endif
                         <tr>
-                            <td align="left">{{$anggaran->prioritas}}</td>
+                            <td align="left">{{$anggaran->kegiatan_id}}</td>
                             <!-- <td align="center">2.09.23.{{ $nam->id }}.{{ ++$idx }}</td> -->
                             <td>{{ $anggaran->kegiatan->nama }}</td>
                             @foreach ($indikatorsasaran as $insan)

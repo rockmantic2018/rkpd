@@ -297,5 +297,6 @@ class RancanganController extends Controller
             'alert' => 'Berhasil !',
             'message' => 'Berhasil Transfer data.',
         ]);
+        
     }
 }
