@@ -1,0 +1,12 @@
+jalankan xampp
+klik start mysql dan apache
+
+
+cd ../..
+cd xampp/htdocs/rkpd
+php artisan key:generate
+php artisan config:cache
+php artisan optimize
+php artisan serve
+
+ketik 127.0.0.1:8000
